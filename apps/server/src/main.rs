@@ -12,7 +12,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let host = std::env::var("CLIPMESH_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let host = std::env::var("CLIPMESH_HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
     let port: u16 = std::env::var("CLIPMESH_PORT")
         .unwrap_or_else(|_| "8085".to_string())
         .parse()
