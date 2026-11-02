@@ -1,0 +1,23 @@
+[package]
+name = "clipmesh-crypto"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+chacha20poly1305.workspace = true
+ed25519-dalek.workspace = true
+x25519-dalek.workspace = true
+hkdf.workspace = true
+sha2.workspace = true
+rand.workspace = true
+zeroize.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+base64.workspace = true
+hex.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
