@@ -1,0 +1,21 @@
+{
+  "description": "ClipMesh Wire Protocol v1 Cryptographic Test Vectors",
+  "vectors": [
+    {
+      "name": "ChaCha20-Poly1305 AEAD Associated Data Binding",
+      "key_hex": "4242424242424242424242424242424242424242424242424242424242424242",
+      "nonce_hex": "000000010000000000000064",
+      "plaintext_utf8": "Sensitive clipboard payload contents.",
+      "associated_data_utf8": "sender_123|recipient_456|seq_100",
+      "algorithm": "ChaCha20-Poly1305"
+    },
+    {
+      "name": "X25519 Diffie-Hellman Key Agreement",
+      "alice_private_hex": "77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a",
+      "alice_public_hex": "8520f0098930a754748b7ddcb43ef75a0dbf3a0d26381af4eba4a98eaa9b4e6a",
+      "bob_private_hex": "5dab087e624a8a4b79e17f8b83800ee66f3bb1292618b6fd1c2f8b27ff88e0eb",
+      "bob_public_hex": "de9edb7d7b7dc1b4d35b61c2ece435373f8343c85b78674dadfc7e146f882b4f"
+    }
+  ]
+}
+

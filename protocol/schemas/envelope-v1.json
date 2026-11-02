@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RelayEnvelopeV1",
+  "type": "object",
+  "required": [
+    "id",
+    "protocol_version",
+    "sender_device_id",
+    "recipient_device_id",
+    "sequence_number",
+    "epoch_id",
+    "nonce",
+    "encrypted_payload",
+    "created_at",
+    "expires_at",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "protocol_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "sender_device_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "recipient_device_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "sequence_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "epoch_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nonce": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 0, "maximum": 255 },
+      "minItems": 12,
+      "maxItems": 12
+    },
+    "encrypted_payload": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 0, "maximum": 255 }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PENDING", "DELIVERED", "ACKNOWLEDGED", "FAILED"]
+    }
+  }
+}
+

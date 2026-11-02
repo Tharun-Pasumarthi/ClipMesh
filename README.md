@@ -1,44 +1,96 @@
-# ClipMesh UI
+# ClipMesh
 
-A responsive React + TypeScript + Tailwind CSS v4 UI starter for ClipMesh.
+> Production-oriented, privacy-first, cross-platform clipboard synchronisation and secure file-transfer platform.
 
-## Included screens
-- Overview dashboard
-- Clipboard history (search, filters, pin/unpin, delete, copy)
-- Trusted device management (demo revoke/restore states)
-- QR pairing (generated QR code + one-time code preview)
-- File transfers (history, filters, new-transfer modal)
-- Security & privacy settings (theme, sync, clipboard monitoring, retention controls)
+ClipMesh enables users to copy content on one device and seamlessly access it on other trusted personal devices without exposing plaintext clipboard data or private keys to cloud infrastructure.
 
-## Run locally
+---
 
-Requirements: Node.js 20.19+ or 22.12+.
+## Key Capabilities
 
-```bash
-npm install
-npm run dev
+- **Zero-Knowledge Cloud Relay**: End-to-end encryption using ChaCha20-Poly1305 AEAD. The relay server routes opaque ciphertext envelopes without access to encryption keys.
+- **Dual-Key Asymmetric Identity**: Strict algorithmic separation between signing keys (Ed25519) and key agreement (X25519).
+- **Proof-of-Possession Authentication**: Device registration and login require cryptographic signature over server nonces, preventing device spoofing.
+- **Hardware-Isolated Keystores**: Private keys are maintained in OS-native secure enclaves (Windows DPAPI, macOS Keychain, Linux Secret Service, Android Keystore TEE).
+- **Authenticated QR Pairing**: Ephemeral Diffie-Hellman key agreement with Short Authentication String (SAS) confirmation and 120-second timeout.
+- **Multi-Stage Delivery Receipts**: Distinguishes server acceptance, network receipt, cryptographic decryption, and local clipboard application.
+- **Resumable Chunked File Transfers**: 64 KB authenticated chunks with per-chunk nonces, out-of-order reassembly, directory traversal protection, and whole-file SHA-256 verification.
+- **Local-First & Offline Resilience**: Local SQLite database for offline clipboard history, search, pin/unpin, and outbound retry queues.
+
+---
+
+## Architectural Layout
+
+```
+clipmesh/
+  apps/
+    server/              # Axum + Tokio WebSocket & REST relay backend
+    desktop/             # Tauri 2 + React + TypeScript + Tailwind v4 desktop app
+    android/             # Kotlin + Jetpack Compose Android client with Keystore & Foreground Service
+  crates/
+    clipmesh-crypto/     # Ed25519, X25519, HKDF-SHA256, ChaCha20-Poly1305, zeroize
+    clipmesh-identity/   # Device identity, keystore abstraction, proof of possession
+    clipmesh-protocol/   # Wire envelopes, canonical associated data builders, validation
+    clipmesh-sync/       # Monotonic sequences, deduplication, vector clocks, multi-stage receipts
+    clipmesh-transfer/   # Chunked file streaming, nonce rotation, whole-file verification
+    clipmesh-storage/    # Local SQLite storage engine, history, retention cleanup
+    clipmesh-core/       # Unified client facade orchestrating all subsystems
+  protocol/
+    schemas/             # JSON schemas for wire messages
+    test-vectors/        # Cryptographic test vectors
+  migrations/            # Versioned SQL migrations (PostgreSQL 17)
+  infrastructure/
+    docker/              # Dockerfiles and compose definitions
+  docs/                  # Complete architecture, threat model, key management & ADRs
+  tests/                 # Workspace test suites & security verification
 ```
 
-Open the local URL printed by Vite.
+---
 
-## Build
+## Quickstart & Verification
 
+### Prerequisites
+- Rust stable (1.85+)
+- Node.js 20+ & npm
+
+### Run Rust Workspace Tests
 ```bash
-npm run build
-npm run preview
+cargo test --workspace
 ```
 
-## Notes before production integration
-This is a frontend prototype with local sample data. It does not connect to the Rust/Axum API, PostgreSQL, Redis, native clipboard APIs, device identity, or a real pairing service.
+### Run Backend Security Integration Tests
+```bash
+cargo test -p clipmesh-server --test security_tests
+```
 
-Recommended next integration points:
-- Replace sample state in `src/App.tsx` with typed API client calls.
-- Fetch device and relay state from `/api/v1`.
-- Replace demo pairing code with short-lived, server-issued, authenticated pairing sessions.
-- Implement device revocation and key rotation in the backend.
-- Connect file selection and transfer progress to the Tauri native layer.
-- Use the Android app's explicit, OS-compliant clipboard interaction flow; do not promise unrestricted background clipboard monitoring.
-- Implement actual E2EE in the shared Rust client core using reviewed protocol libraries. The UI's encryption labels are illustrative and must not be treated as proof that encryption is implemented.
+### Run the Relay Backend Server
+```bash
+cargo run -p clipmesh-server
+```
+Runs at `http://localhost:8080`. Check health at `http://localhost:8080/health`.
 
-## Theme
-Use the theme buttons in the top bar to select light, system, or dark mode. The preference is stored in localStorage.
+### Run the Desktop Frontend
+```bash
+npm install --prefix apps/desktop
+npm run dev --prefix apps/desktop
+```
+
+---
+
+## Security Architecture & Design Guarantees
+
+Detailed security specifications are located in `/docs`:
+- [System Overview](docs/architecture/system-overview.md)
+- [Component Boundaries](docs/architecture/component-boundaries.md)
+- [Threat Model (STRIDE Analysis)](docs/security/threat-model.md)
+- [Key Management Lifecycle](docs/security/key-management.md)
+- [Authenticated QR Pairing Protocol](docs/security/pairing-protocol.md)
+- [Wire Protocol Specification (v1)](docs/protocols/protocol-v1.md)
+- [Architecture Decisions (ADRs)](docs/decisions/architecture-decisions.md)
+
+---
+
+## License
+
+Licensed under Apache-2.0 or MIT.
+
