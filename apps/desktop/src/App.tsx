@@ -371,9 +371,9 @@ function PairingPage({ notify, onApproveNewDevice }: { notify: (s: string) => vo
     <PageHeading eyebrow="EXPAND YOUR MESH" title="Pair a new device" description="Connect a device to your private mesh in a few seconds." />
     <div className="pair-layout">
       <section className="panel pair-card"><div className="step-label"><span>01</span> SCAN TO PAIR</div><h2>Open ClipMesh on your new device</h2><p>Choose <strong>Pair existing device</strong> and scan this one-time QR code.</p>
-        <div className="qr-frame"><QRCodeSVG value={`clipmesh://pair?v=1&code=${code}&ep=${encodeURIComponent(window.location.protocol + '//' + window.location.hostname + ':8085')}`} size={190} bgColor="#ffffff" fgColor="#111827" level="H" includeMargin /></div>
+        <div className="qr-frame"><QRCodeSVG value={`clipmesh://pair?v=1&code=${code}&ep=${encodeURIComponent((typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") ? (window.location.protocol + '//192.168.1.64:8085') : (window.location.protocol + '//' + window.location.hostname + ':8085')))}`} size={190} bgColor="#ffffff" fgColor="#111827" level="H" includeMargin /></div>
         <div className="pair-code-label">OR ENTER THIS CODE</div><div className="pair-code">{code}<button className="icon-button" onClick={() => { navigator.clipboard?.writeText(code); notify("Pairing code copied"); }}><Copy size={15} /></button></div>
-        <div className="pair-expiry"><Clock3 size={14} /> Expires in {minutes}:{seconds} <span>·</span> Single use only</div>
+        <div className="pair-expiry"><Clock3 size={14} /> Expires in {minutes}:{seconds} <span>·</span> Relay: <code>{(typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) ? "192.168.1.64:8085" : window.location.hostname + ":8085"}</code></div>
         <button className="button secondary full" onClick={regenerate}><RefreshCw size={15} /> Generate new code</button>
       </section>
       <section className="pair-side">
