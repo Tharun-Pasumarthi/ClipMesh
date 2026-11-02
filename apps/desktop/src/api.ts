@@ -2,7 +2,7 @@
  * ClipMesh Backend API Client
  */
 
-const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8080/api/v1";
+const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || "http://localhost:8085/api/v1";
 
 export interface DeviceDto {
   id: string;
@@ -105,4 +105,3 @@ export const api = {
     return res.json();
   },
 };
-

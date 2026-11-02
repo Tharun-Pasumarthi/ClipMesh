@@ -27,3 +27,4 @@ interface ClipDao {
     @Query("DELETE FROM clips WHERE isPinned = 0 AND timestampMs < :cutoffMs")
     suspend fun cleanupRetention(cutoffMs: Long): Int
 }
+

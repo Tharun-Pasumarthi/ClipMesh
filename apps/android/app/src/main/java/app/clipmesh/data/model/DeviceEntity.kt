@@ -13,3 +13,4 @@ data class DeviceEntity(
     val isRevoked: Boolean,
     val lastSeenMs: Long
 )
+

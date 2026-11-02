@@ -35,3 +35,4 @@ path = "security/tampering_and_replay.rs"
 [[test]]
 name = "cross_platform_wire_compatibility"
 path = "cross-platform/wire_compatibility.rs"
+

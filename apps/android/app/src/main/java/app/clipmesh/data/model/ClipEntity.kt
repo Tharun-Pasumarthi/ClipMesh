@@ -15,3 +15,4 @@ data class ClipEntity(
     val originDevice: String,
     val timestampMs: Long
 )
+
