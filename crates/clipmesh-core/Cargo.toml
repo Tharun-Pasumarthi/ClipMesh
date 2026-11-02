@@ -1,0 +1,27 @@
+[package]
+name = "clipmesh-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+clipmesh-crypto = { path = "../clipmesh-crypto" }
+clipmesh-identity = { path = "../clipmesh-identity" }
+clipmesh-protocol = { path = "../clipmesh-protocol" }
+clipmesh-storage = { path = "../clipmesh-storage" }
+clipmesh-sync = { path = "../clipmesh-sync" }
+clipmesh-transfer = { path = "../clipmesh-transfer" }
+uuid.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+parking_lot.workspace = true
+tokio.workspace = true
+async-trait.workspace = true
+
+[dev-dependencies]
+tempfile = "3.14"
+

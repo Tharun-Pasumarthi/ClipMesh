@@ -1,0 +1,21 @@
+[package]
+name = "clipmesh-sync"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+clipmesh-crypto = { path = "../clipmesh-crypto" }
+clipmesh-protocol = { path = "../clipmesh-protocol" }
+clipmesh-storage = { path = "../clipmesh-storage" }
+uuid.workspace = true
+chrono.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+parking_lot.workspace = true
+
+[dev-dependencies]
+rand.workspace = true
+
