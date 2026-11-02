@@ -16,11 +16,29 @@ interface DeviceItem {
   id: string;
   name: string;
   detail: string;
-  icon: typeof Monitor | typeof Smartphone | typeof Laptop;
+  icon?: any;
   status: string;
   last: string;
   color: string;
   isRevoked?: boolean;
+}
+
+function DeviceIcon({ device, size = 18 }: { device: DeviceItem; size?: number }) {
+  let IconComponent = Laptop;
+  if (typeof device.icon === "function" || (typeof device.icon === "object" && device.icon !== null && "$$typeof" in (device.icon as any))) {
+    IconComponent = device.icon;
+  } else {
+    const name = (device.name || "").toLowerCase();
+    const detail = (device.detail || "").toLowerCase();
+    if (name.includes("pixel") || name.includes("phone") || name.includes("android") || detail.includes("android")) {
+      IconComponent = Smartphone;
+    } else if (name.includes("pc") || name.includes("windows") || name.includes("desktop") || detail.includes("windows")) {
+      IconComponent = Monitor;
+    } else {
+      IconComponent = Laptop;
+    }
+  }
+  return <IconComponent size={size} />;
 }
 
 interface TransferItem {
@@ -80,7 +98,12 @@ function App() {
   const [deviceList, setDeviceList] = useState<DeviceItem[]>(() => {
     try {
       const saved = localStorage.getItem("clipmesh-devices");
-      return saved ? JSON.parse(saved) : initialDevices;
+      if (!saved) return initialDevices;
+      const parsed: DeviceItem[] = JSON.parse(saved);
+      return parsed.map(d => ({
+        ...d,
+        icon: typeof d.icon === "function" ? d.icon : undefined
+      }));
     } catch {
       return initialDevices;
     }
@@ -274,10 +297,9 @@ function Overview({ clips, devices, setPage, copyClip }: { clips: ClipItem[]; de
       <section className="panel devices-panel">
         <SectionTitle title="Your devices" action={<button className="text-link" onClick={() => setPage("devices")}>Manage <ChevronRight size={14} /></button>} />
         {devices.slice(0, 3).map((device) => {
-          const Icon = device.icon;
           const isOffline = device.status === "Offline" || device.isRevoked;
           return <div className="mini-device" key={device.id}>
-            <div className="device-icon"><Icon size={18} /></div>
+            <div className="device-icon"><DeviceIcon device={device} size={18} /></div>
             <div className="device-meta"><strong>{device.name}</strong><small>{device.isRevoked ? "Access revoked" : device.last}</small></div>
             <span className={`status-dot ${isOffline ? "offline" : ""}`} />
           </div>;
@@ -321,10 +343,9 @@ function DevicesPage({ devices, onToggleRevoke, setPage }: { devices: DeviceItem
     <PageHeading eyebrow="YOUR NETWORK" title="Trusted devices" description="Manage the devices that can access your ClipMesh network." action={<button className="button primary" onClick={() => setPage("pairing")}><Plus size={16} /> Add device</button>} />
     <div className="device-summary"><div><span className="online-dot" /> <strong>{activeCount} devices online</strong><small> · {devices.length} devices registered</small></div><span className="encrypted-label"><ShieldCheck size={14} /> All connections encrypted</span></div>
     <div className="device-grid">{devices.map(device => {
-      const Icon = device.icon;
       const isRevoked = !!device.isRevoked;
       return <div className={`panel device-card ${isRevoked ? "revoked" : ""}`} key={device.id}>
-        <div className="device-card-top"><div className="device-icon large"><Icon size={21} /></div><button className="icon-button" aria-label="Device options"><MoreHorizontal size={18} /></button></div>
+        <div className="device-card-top"><div className="device-icon large"><DeviceIcon device={device} size={21} /></div><button className="icon-button" aria-label="Device options"><MoreHorizontal size={18} /></button></div>
         <h3>{device.name}</h3><p>{device.detail}</p>
         <div className="device-status-line"><span className={`status-dot ${device.status === "Offline" || isRevoked ? "offline" : ""}`} />{isRevoked ? "Access revoked" : device.status}<span className="device-last">{isRevoked ? "Blocked" : device.last}</span></div>
         <div className="device-card-footer">{device.status === "Current device" ? <span className="current-device">THIS DEVICE</span> : <button className={`button small ${isRevoked ? "secondary" : "danger"}`} onClick={() => onToggleRevoke(device.id)}>{isRevoked ? "Restore access" : "Revoke access"}</button>}</div>
