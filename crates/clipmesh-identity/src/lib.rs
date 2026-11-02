@@ -10,10 +10,18 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use uuid::Uuid;
 
+#[cfg(windows)]
+pub mod dpapi;
+#[cfg(windows)]
+pub use dpapi::DpapiSecureKeyStore;
+
 #[derive(Error, Debug)]
 pub enum IdentityError {
     #[error("Keystore error: {0}")]
     KeystoreError(String),
+
+    #[error("Storage error: {0}")]
+    Storage(String),
 
     #[error("Cryptographic error: {0}")]
     Crypto(#[from] CryptoError),

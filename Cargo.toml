@@ -10,6 +10,7 @@ members = [
     "crates/clipmesh-core",
     "apps/server",
     "apps/desktop/src-tauri",
+    "tests",
 ]
 
 [workspace.package]
@@ -17,7 +18,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["ClipMesh Core Team"]
 license = "Apache-2.0 OR MIT"
-repository = "https://github.com/clipmesh/clipmesh"
+repository = "https://github.com/Tharun-Pasumarthi/ClipMesh"
 
 [workspace.dependencies]
 tokio = { version = "1.42", features = ["full"] }
@@ -40,10 +41,10 @@ redis = { version = "0.27", features = ["tokio-comp", "connection-manager"] }
 axum = { version = "0.8", features = ["ws"] }
 axum-extra = { version = "0.10", features = ["typed-header"] }
 tower-http = { version = "0.6", features = ["cors", "trace"] }
+tower = "0.5"
 base64 = "0.22"
 hex = "0.4"
 rusqlite = { version = "0.32", features = ["bundled"] }
 parking_lot = "0.12"
 async-trait = "0.1"
 futures-util = "0.3"
-

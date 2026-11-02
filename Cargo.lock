@@ -432,6 +432,7 @@ dependencies = [
  "tempfile",
  "thiserror",
  "uuid",
+ "windows-sys 0.61.2",
  "zeroize",
 ]
 
@@ -510,6 +511,29 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror",
+ "uuid",
+]
+
+[[package]]
+name = "clipmesh-tests"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "base64 0.22.1",
+ "chrono",
+ "clipmesh-core",
+ "clipmesh-crypto",
+ "clipmesh-identity",
+ "clipmesh-protocol",
+ "clipmesh-server",
+ "clipmesh-storage",
+ "clipmesh-sync",
+ "clipmesh-transfer",
+ "hex",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tower",
  "uuid",
 ]
 

@@ -46,3 +46,4 @@ jobs:
 
       - name: Typecheck and build frontend
         run: npm run build --prefix apps/desktop
+

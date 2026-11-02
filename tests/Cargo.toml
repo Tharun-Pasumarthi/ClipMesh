@@ -1,0 +1,37 @@
+[package]
+name = "clipmesh-tests"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+clipmesh-core = { path = "../crates/clipmesh-core" }
+clipmesh-crypto = { path = "../crates/clipmesh-crypto" }
+clipmesh-identity = { path = "../crates/clipmesh-identity" }
+clipmesh-protocol = { path = "../crates/clipmesh-protocol" }
+clipmesh-storage = { path = "../crates/clipmesh-storage" }
+clipmesh-sync = { path = "../crates/clipmesh-sync" }
+clipmesh-transfer = { path = "../crates/clipmesh-transfer" }
+clipmesh-server = { path = "../apps/server" }
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+hex.workspace = true
+base64.workspace = true
+tower.workspace = true
+axum.workspace = true
+
+[[test]]
+name = "integration_multi_device"
+path = "integration/multi_device_sync.rs"
+
+[[test]]
+name = "security_tampering_and_replay"
+path = "security/tampering_and_replay.rs"
+
+[[test]]
+name = "cross_platform_wire_compatibility"
+path = "cross-platform/wire_compatibility.rs"
